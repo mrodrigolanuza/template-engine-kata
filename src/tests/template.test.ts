@@ -3,8 +3,10 @@
 - should return the template content when no variables included
 - should return the template content with one variable replaced
 - should return the template content with two variables replaced
-- should return error when a variable is empty string
-- should return error when a variable is null
+- should return an error when dictionary is null
+- should return an error when dictionary is empty
+- should return error when a dictionary variable is empty string
+- should return error when a dictionary variable is null
 */
 
 import { TemplateEngine } from '../core/template';
@@ -41,6 +43,18 @@ describe('The Template Engine', () => {
 		const template = TemplateEngine.create(templateContent);
 
 		expect(template.build(varDictinary)).toBe("This is my name");
+	});
+
+	it('should return the template content with one variable replaced.', () => {
+		const templateContent = "This is my name: ${name}.";
+		type KeyValueDictionary = Record<string, string>;
+		const varDictinary: KeyValueDictionary = {
+			name: "Marcos"
+		};
+
+		const template = TemplateEngine.create(templateContent);
+
+		expect(template.build(varDictinary)).toBe("This is my name: Marcos.");
 	});
 });
 

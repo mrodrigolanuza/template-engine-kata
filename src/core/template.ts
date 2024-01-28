@@ -7,7 +7,7 @@ export class TemplateEngine {
 		if(content === "")
 			throw new Error("The template content can not be empty.")
 		
-		if(varDictionary == null)
+		if(Object.keys(varDictionary).length == 0)
 			throw new Error("The dictionary must be populated.")
 
 		return new TemplateEngine(content, varDictionary);

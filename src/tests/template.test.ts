@@ -28,7 +28,7 @@ describe('The Template Engine', () => {
 		
 	});
 
-	it('should return an error when the template engine is instantiated with no dictionary.', () => {
+	it('should return an error when the template engine is instantiated with empty dictionary.', () => {
 		const templateText = "This is my name.";
 		const emptyDictionary :Record<string, string> = { };
 

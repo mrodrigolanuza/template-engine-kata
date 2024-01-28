@@ -11,7 +11,7 @@
 
 import { TemplateEngine } from '../core/template';
 
-const irrelevantDictionary = {
+const irrelevantDictionary :Record<string, string> = {
 	name: "IrrelevantName",
 	firstSurname: "IrrelevantSurname1",
 	secondSurname: "IrrelevantSurname2"
@@ -24,7 +24,17 @@ describe('The Template Engine', () => {
 
 		expect(()=>{
 			TemplateEngine.create(templateContent, irrelevantDictionary);
-		}).toThrow();
+		}).toThrow(Error("The template content can not be empty."));
+		
+	});
+
+	it('should return an error when the template engine is instantiated with no dictionary.', () => {
+		const templateText = "This is my name.";
+		const emptyDictionary :Record<string, string> = { };
+
+		expect(()=>{
+			TemplateEngine.create(templateText, emptyDictionary);
+		}).toThrow(Error("The dictionary must be populated."));
 		
 	});
 

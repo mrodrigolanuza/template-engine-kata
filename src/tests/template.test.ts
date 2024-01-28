@@ -11,6 +11,12 @@
 
 import { TemplateEngine } from '../core/template';
 
+const irrelevantDictionary = {
+	name: "IrrelevantName",
+	firstSurname: "IrrelevantSurname1",
+	secondSurname: "IrrelevantSurname2"
+};
+
 describe('The Template Engine', () => {
 
 	it('should return an error when the template engine is instantiated with empty content.', () => {
@@ -23,44 +29,21 @@ describe('The Template Engine', () => {
 	});
 
 	it('should return the template content when no variables included.', () => {
-		const templateContent = "This is my name";
-		
-		type KeyValueDictionary = Record<string, string>;
+		const templateEngine = TemplateEngine.create("This is my name.");
 
-		const varDictinary: KeyValueDictionary = {
-			name: "Marcos",
-			firstSurname: "Surname1",
-			secondSurname: "Surname2"
-		};
-
-		const template = TemplateEngine.create(templateContent);
-
-		expect(template.build(varDictinary)).toBe("This is my name");
+		expect(templateEngine.build(irrelevantDictionary)).toBe("This is my name.");
 	});
 
 	it('should return the template content with one variable replaced.', () => {
-		const templateContent = "This is my name: ${name}.";
-		type KeyValueDictionary = Record<string, string>;
-		const varDictinary: KeyValueDictionary = {
-			name: "Irrelevant"
-		};
+		const templateEngine = TemplateEngine.create("This is my name: ${name}.");
 
-		const template = TemplateEngine.create(templateContent);
-
-		expect(template.build(varDictinary)).toBe("This is my name: Irrelevant.");
+		expect(templateEngine.build(irrelevantDictionary)).toBe("This is my name: IrrelevantName.");
 	});
 
 	it('should return the template content with two variables replaced.', () => {
-		const templateContent = "My full name is ${name} ${surname}.";
-		type KeyValueDictionary = Record<string, string>;
-		const varDictinary: KeyValueDictionary = {
-			name: "IrrelevantName",
-			surname: "IrrelevantSurname"
-		};
+		const templateEngine = TemplateEngine.create("My full name is ${name} ${firstSurname}.");
 
-		const template = TemplateEngine.create(templateContent);
-
-		expect(template.build(varDictinary)).toBe("My full name is IrrelevantName IrrelevantSurname.");
+		expect(templateEngine.build(irrelevantDictionary)).toBe("My full name is IrrelevantName IrrelevantSurname1.");
 	});
 });
 

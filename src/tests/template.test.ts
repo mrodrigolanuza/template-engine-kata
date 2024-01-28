@@ -11,7 +11,7 @@ import { TemplateEngine } from '../core/template';
 
 describe('The Template Engine', () => {
 	it('should be instantiated.', () => {
-		const templateContent = "";
+		const templateContent = "My name is ${name}";
 		
 		const template = TemplateEngine.create(templateContent);
 

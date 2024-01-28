@@ -26,5 +26,21 @@ describe('The Template Engine', () => {
 		}).toThrow();
 		
 	});
+
+	it('should return the template content when no variables included.', () => {
+		const templateContent = "This is my name";
+		
+		type KeyValueDictionary = Record<string, string>;
+
+		const varDictinary: KeyValueDictionary = {
+			name: "Marcos",
+			firstSurname: "Surname1",
+			secondSurname: "Surname2"
+		};
+
+		const template = TemplateEngine.create(templateContent);
+
+		expect(template.build(varDictinary)).toBe("This is my name");
+	});
 });
 

@@ -67,7 +67,7 @@ describe('The Template Engine', () => {
 
 		const template = TemplateEngine.create(templateContent);
 
-		expect(template.build(varDictinary)).toBe("My full name is IrrelevantName IrrelevantSurname .");
+		expect(template.build(varDictinary)).toBe("My full name is IrrelevantName IrrelevantSurname.");
 	});
 });
 

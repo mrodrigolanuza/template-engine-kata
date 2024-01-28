@@ -1,5 +1,5 @@
 export class TemplateEngine {
-	private constructor(private readonly templateText: string) { }
+	private constructor(private readonly templateRawText: string) { }
 
 	static create(content:string): TemplateEngine {
 		
@@ -10,21 +10,41 @@ export class TemplateEngine {
 	}
 
 	build(varDictinary: Record<string, string>): string {
-		let parsedTemplateResult:string = this.templateText;
-		const templateVariables = this.templateText.match(/\${(\w+)}/g);
+		const templateVariables = this.extractTemplateVariables();
 
-    	if (templateVariables == null) 		
-			return this.templateText;
+    	if (templateHasNotVariables(templateVariables)) 		
+			return this.templateRawText;
 
-		for (const templateVar of templateVariables) {
-			const varName = templateVar.substring(2, templateVar.length - 1);
-			const valor = varDictinary[varName];
-			if (valor !== undefined) {
-				parsedTemplateResult = parsedTemplateResult.replace(templateVar, valor);
-			}
-		}
-
-		return parsedTemplateResult;
+		return replaceTemplateVariablesWithDictionaryValues(templateVariables, varDictinary, this.templateRawText);
 	}
+
+	private extractTemplateVariables() {
+		return this.templateRawText.match(/\${(\w+)}/g);
+	}
+}
+
+function replaceTemplateVariablesWithDictionaryValues(templateVariables: RegExpMatchArray, varDictinary: Record<string, string>, parsedResult: string) {
+	templateVariables.forEach(templateVar => {
+		if (existsVariableInDictionary(varDictinary, extractVariableName(templateVar))) {
+			parsedResult = replaceTemplateVariable(parsedResult, templateVar, varDictinary);
+		}
+	});
+	return parsedResult;
+}
+
+function replaceTemplateVariable(parsedResult: string, templateVar: string, varDictinary: Record<string, string>): string {
+	return parsedResult.replace(templateVar, varDictinary[(extractVariableName(templateVar))]);
+}
+
+function extractVariableName(templateVar: string) {
+	return templateVar.substring(2, templateVar.length - 1);
+}
+
+function existsVariableInDictionary(varDictinary: Record<string, string>, varName: string) {
+	return varDictinary[varName] !== undefined;
+}
+
+function templateHasNotVariables(templateVariables: RegExpMatchArray) {
+	return templateVariables == null;
 }
 

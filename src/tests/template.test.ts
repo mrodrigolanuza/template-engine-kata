@@ -49,12 +49,25 @@ describe('The Template Engine', () => {
 		const templateContent = "This is my name: ${name}.";
 		type KeyValueDictionary = Record<string, string>;
 		const varDictinary: KeyValueDictionary = {
-			name: "Marcos"
+			name: "Irrelevant"
 		};
 
 		const template = TemplateEngine.create(templateContent);
 
-		expect(template.build(varDictinary)).toBe("This is my name: Marcos.");
+		expect(template.build(varDictinary)).toBe("This is my name: Irrelevant.");
+	});
+
+	it('should return the template content with two variables replaced.', () => {
+		const templateContent = "My full name is ${name} ${surname}.";
+		type KeyValueDictionary = Record<string, string>;
+		const varDictinary: KeyValueDictionary = {
+			name: "IrrelevantName",
+			surname: "IrrelevantSurname"
+		};
+
+		const template = TemplateEngine.create(templateContent);
+
+		expect(template.build(varDictinary)).toBe("My full name is IrrelevantName IrrelevantSurname .");
 	});
 });
 

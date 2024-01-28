@@ -23,27 +23,30 @@ describe('The Template Engine', () => {
 		const templateContent = "";
 
 		expect(()=>{
-			TemplateEngine.create(templateContent);
+			TemplateEngine.create(templateContent, irrelevantDictionary);
 		}).toThrow();
 		
 	});
 
 	it('should return the template content when no variables included.', () => {
-		const templateEngine = TemplateEngine.create("This is my name.");
+		const templateText = "This is my name.";
+		const templateEngine = TemplateEngine.create(templateText, irrelevantDictionary);
 
-		expect(templateEngine.build(irrelevantDictionary)).toBe("This is my name.");
+		expect(templateEngine.build()).toBe("This is my name.");
 	});
 
 	it('should return the template content with one variable replaced.', () => {
-		const templateEngine = TemplateEngine.create("This is my name: ${name}.");
+		const templateText = "This is my name: ${name}.";
+		const templateEngine = TemplateEngine.create(templateText, irrelevantDictionary);
 
-		expect(templateEngine.build(irrelevantDictionary)).toBe("This is my name: IrrelevantName.");
+		expect(templateEngine.build()).toBe("This is my name: IrrelevantName.");
 	});
 
 	it('should return the template content with two variables replaced.', () => {
-		const templateEngine = TemplateEngine.create("My full name is ${name} ${firstSurname}.");
+		const templateText = "My full name is ${name} ${firstSurname}.";
+		const templateEngine = TemplateEngine.create(templateText, irrelevantDictionary);
 
-		expect(templateEngine.build(irrelevantDictionary)).toBe("My full name is IrrelevantName IrrelevantSurname1.");
+		expect(templateEngine.build()).toBe("My full name is IrrelevantName IrrelevantSurname1.");
 	});
 });
 

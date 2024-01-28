@@ -1,21 +1,25 @@
 export class TemplateEngine {
-	private constructor(private readonly templateRawText: string) { }
+	private constructor(private readonly templateRawText: string, 
+					    private readonly varDictinary: Record<string, string>) { }
 
-	static create(content:string): TemplateEngine {
+	static create(content:string, varDictionary: Record<string, string>): TemplateEngine {
 		
 		if(content === "")
 			throw new Error("The template content can not be empty.")
 		
-		return new TemplateEngine(content);
+		if(varDictionary == null)
+			throw new Error("The dictionary must be populated.")
+
+		return new TemplateEngine(content, varDictionary);
 	}
 
-	build(varDictinary: Record<string, string>): string {
+	build(): string {
 		const templateVariables = this.extractTemplateVariables();
 
     	if (templateHasNotVariables(templateVariables)) 		
 			return this.templateRawText;
 
-		return replaceTemplateVariablesWithDictionaryValues(templateVariables, varDictinary, this.templateRawText);
+		return replaceTemplateVariablesWithDictionaryValues(this.templateRawText, templateVariables, this.varDictinary);
 	}
 
 	private extractTemplateVariables() {
@@ -23,7 +27,9 @@ export class TemplateEngine {
 	}
 }
 
-function replaceTemplateVariablesWithDictionaryValues(templateVariables: RegExpMatchArray, varDictinary: Record<string, string>, parsedResult: string) {
+function replaceTemplateVariablesWithDictionaryValues(templateRawText: string, templateVariables: RegExpMatchArray, varDictinary: Record<string, string>) {
+	let parsedResult: string = templateRawText;
+	
 	templateVariables.forEach(templateVar => {
 		if (existsVariableInDictionary(varDictinary, extractVariableName(templateVar))) {
 			parsedResult = replaceTemplateVariable(parsedResult, templateVar, varDictinary);
